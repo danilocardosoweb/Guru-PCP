@@ -18,9 +18,13 @@ else:
 app = Flask(__name__, static_folder='static')
 
 # Configuração da API OpenRouter
-# Chave atualizada para garantir que estamos usando a mais recente
-OPENROUTER_API_KEY = "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"
+# Obter a chave da API de variável de ambiente ou usar a chave padrão
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "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")
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+# Verificar se a chave da API está definida
+if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "":
+    print("AVISO: Chave da API OpenRouter não encontrada nas variáveis de ambiente.")
 
 # Configuração de fallback para quando a API não responder
 FALLBACK_RESPONSES = {
@@ -80,7 +84,7 @@ def chat():
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost:5000",  # Opcional: identificar a origem da requisição
+        "HTTP-Referer": "https://guru-pcp.vercel.app",  # Atualizado para o domínio do Vercel
         "X-Title": "Guru PCP - Assistente Especializado"  # Opcional: identificar o aplicativo
     }
     
@@ -114,16 +118,23 @@ def chat():
         
         # Verificar se a resposta é válida
         if response.status_code != 200:
-            error_message = f"Erro na API (Status {response.status_code}): "
-            try:
-                error_data = response.json()
-                error_detail = error_data.get('error', {}).get('message', 'Detalhes não disponíveis')
-                error_message += error_detail
-            except:
-                error_message += "Não foi possível obter detalhes do erro."
+            error_text = response.text
+            print(f"ERRO na API: {response.status_code} - {error_text}")
+            
+            # Mensagem de erro mais amigável e detalhada
+            error_message = "Desculpe, estou com dificuldades para me conectar ao serviço."
+            
+            # Adicionar detalhes específicos para erros comuns
+            if response.status_code == 401:
+                error_message += " Parece que há um problema com a autenticação da API. Por favor, verifique se a chave da API está configurada corretamente."
+            elif response.status_code == 429:
+                error_message += " Estamos recebendo muitas solicitações no momento. Por favor, tente novamente em alguns minutos."
+            elif response.status_code >= 500:
+                error_message += " O servidor da API está enfrentando problemas. Por favor, tente novamente mais tarde."
+            else:
+                error_message += f" Erro na API (Status {response.status_code}): {error_text}"
                 
-            print(f"ERRO: {error_message}")
-            return jsonify({"response": f"Desculpe, estou com dificuldades para me conectar ao serviço. Erro: {error_message}"})
+            return jsonify({"response": error_message})
         
         # Tentar processar a resposta JSON
         try:
