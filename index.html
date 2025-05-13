@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guru PCP - Assistente Especializado</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="static/images/Guru_olhos_aberto.png" alt="Guru PCP Logo" class="guru-logo" id="guru-logo">
+                <div class="title-container">
+                    <h1>Guru PCP</h1>
+                    <p>Assistente Especializado para sua Empresa</p>
+                </div>
+            </div>
+            <button id="info-button" class="info-button" title="Informações sobre o Guru PCP">
+                <i class="fas fa-info-circle"></i>
+            </button>
+        </header>
+        
+        <!-- Modal de informações (versão compacta) -->
+        <div id="info-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Guru PCP</h2>
+                <div class="modal-body">
+                    <div class="guru-images">
+                        <img src="static/images/Guru_olhos_aberto.png" alt="Guru com olhos abertos" class="guru-image">
+                        <img src="static/images/Guru_Olhos_fechado.png" alt="Guru com olhos fechados" class="guru-image">
+                        <img src="static/images/Guru_boca_aberta.png" alt="Guru com boca aberta" class="guru-image">
+                    </div>
+                    <div class="video-container">
+                        <video controls height="180">
+                            <source src="static/images/Animacao_Conversa.mp4" type="video/mp4">
+                            Seu navegador não suporta vídeos HTML5.
+                        </video>
+                    </div>
+                    <p>Assistente especializado com abordagem humana e descontraída para ajudar com questões de PCP, Logística, Vendas e Finanças.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="selector-container">
+            <div class="agent-selector">
+                <label for="agent-type">Escolha o especialista:</label>
+                <select id="agent-type">
+                    <option value="pcp">Especialista em PCP</option>
+                    <option value="logistica">Especialista em Logística</option>
+                    <option value="vendas">Especialista em Vendas e Trade Marketing</option>
+                    <option value="financeiro">Especialista em Financeiro e Controladoria</option>
+                </select>
+            </div>
+            
+            <div class="model-selector">
+                <label for="model-type">Escolha o modelo:</label>
+                <select id="model-type">
+                    <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    <option value="openai/gpt-4o">GPT-4o</option>
+                    <option value="anthropic/claude-3-haiku">Claude 3 Haiku</option>
+                    <option value="anthropic/claude-3-sonnet">Claude 3 Sonnet</option>
+                    <option value="google/gemini-pro">Gemini Pro</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-actions">
+                <button id="clear-chat" class="action-button clear"><i class="fas fa-trash"></i> Limpar Conversa</button>
+                <button id="print-chat" class="action-button print"><i class="fas fa-print"></i> Imprimir Conversa</button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message system">
+                    <div class="message-content">
+                        <p>Olá! Sou o assistente especializado em PCP. Como posso ajudar você hoje?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <textarea id="user-input" placeholder="Digite sua pergunta aqui..."></textarea>
+                <button id="send-button">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Guru PCP - Assistente Especializado</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
