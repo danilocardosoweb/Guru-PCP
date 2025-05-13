@@ -18,13 +18,9 @@ else:
 app = Flask(__name__, static_folder='static')
 
 # Configuração da API OpenRouter
-# Obter a chave da API de variável de ambiente ou usar a chave padrão
-OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "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")
+# Definir a chave da API diretamente para garantir que funcione no Vercel
+OPENROUTER_API_KEY = "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"
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-
-# Verificar se a chave da API está definida
-if not OPENROUTER_API_KEY or OPENROUTER_API_KEY == "":
-    print("AVISO: Chave da API OpenRouter não encontrada nas variáveis de ambiente.")
 
 # Configuração de fallback para quando a API não responder
 FALLBACK_RESPONSES = {
@@ -83,9 +79,7 @@ def chat():
     # Preparar a requisição para o OpenRouter
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://guru-pcp.vercel.app",  # Atualizado para o domínio do Vercel
-        "X-Title": "Guru PCP - Assistente Especializado"  # Opcional: identificar o aplicativo
+        "Content-Type": "application/json"
     }
     
     payload = {
