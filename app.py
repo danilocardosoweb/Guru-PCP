@@ -2,11 +2,20 @@ from flask import Flask, request, jsonify, send_from_directory
 import requests
 import os
 import json
+import ssl
 
 # Importar as personalidades dos agentes do arquivo separado
 from agent_personalities import AGENT_PERSONALITIES
 
-app = Flask(__name__)
+# Desabilitar verificação de SSL para facilitar o desenvolvimento
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+app = Flask(__name__, static_folder='static')
 
 # Configuração da API OpenRouter
 # Chave atualizada para garantir que estamos usando a mais recente
@@ -152,6 +161,16 @@ def chat():
         print(f"ERRO geral ao processar a solicitação: {str(e)}")
         fallback_message = FALLBACK_RESPONSES.get(agent_type, FALLBACK_RESPONSES['pcp'])
         return jsonify({"response": f"{fallback_message} (Erro interno no servidor)"}), 500
+
+# Rota para servir arquivos estáticos (necessário para o Vercel)
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory('.', path)
+
+# Rota para a raiz
+@app.route('/')
+def serve_index():
+    return send_from_directory('.', 'index.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
